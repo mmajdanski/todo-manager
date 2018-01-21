@@ -1,0 +1,14 @@
+<div>
+    <label for="todotext">Input Todo Text:</label>
+    <input #newtodotext type="text" (keyup.enter)="submitTodo(newtodotext.value); newtodotext.value=''">
+    <button (click)="submitTodo(newtodotext.value); newtodotext.value=''">Add</button>
+</div>
+
+<!--
+<div [hidden]="true">
+    <label for="todotext">Edit Todo Text:</label>
+    <input  type="text" (keyup.enter)="submitTodo(todotext.value); todotext.value=''">
+    <button (click)="submitTodo(todotext.value); todotext.value=''">Add</button>
+</div>
+
+-->
