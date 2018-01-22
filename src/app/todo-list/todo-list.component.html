@@ -1,9 +1,11 @@
 <ul>
   <li *ngFor="let todo of todos | async">
-    <button (click)="changeTodoStatus(todo.id)" [hidden]="todo.editMode">Checkmark Placeholder</button>
-    <span [hidden]="todo.editMode">ID: {{todo.id}} -TODO: {{todo.text}} - Completion status: {{todo.status}}</span>
+    <button (click)="changeTodoStatus(todo.id, todo.status)" [hidden]="todo.editMode">Checkmark</button>
+    <span [hidden]="todo.editMode">TODO: {{todo.text}} - Completion status: {{todo.status}}</span>
     <input [(ngModel)]="todo.text" #ctrl="ngModel" type="text" [hidden]="!todo.editMode" >
     <button (click)="deleteTodo(todo.id)" [hidden]="todo.editMode">X</button>
-    <button (click)="editTodoText(todo.id)">Edit</button></li>
+    <button (click)="editTodoText(todo.id)" [hidden]="todo.editMode">Edit</button>
+    <button (click)="submitEditTodoText(todo.id, todo.text)" [hidden]="!todo.editMode">Submit Edit</button>
+    <button (click)="cancelEditTodoText(todo.id)" [hidden]="!todo.editMode">Cancel Edit</button></li>
 </ul>
 

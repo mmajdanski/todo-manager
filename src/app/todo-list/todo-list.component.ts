@@ -7,7 +7,7 @@ import { TodoService } from "../todo.service";
 import { AngularFirestore, AngularFirestoreCollection} from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
-export interface Todo { text: string; status: string; }
+export interface Todo { text: string; status: string; editMode: boolean; }
 export interface TodoId extends Todo { id: string; }
 
 
@@ -48,13 +48,39 @@ export class TodoListComponent implements OnInit {
     this.db.collection('todos').doc(documentid).delete();
   }
 
-  changeTodoStatus(id){
-    this.todoService.changeTodoStatus(id);
+  changeTodoStatus(documentid, currentStatus){
+    let newStatus: string;
+    
+    if(currentStatus == 'incomplete'){
+      newStatus = 'complete'
+    }else{
+      newStatus = 'incomplete'
+    }
+
+    this.db.collection('todos').doc(documentid).update({
+      status: newStatus
+    })
   }
 
-  editTodoText(id){
-    this.todoService.editTodoText(id);
+  editTodoText(documentid){
+    this.db.collection('todos').doc(documentid).update({
+      editMode: true
+    })
   }
 
+  cancelEditTodoText(documentid){
+    this.db.collection('todos').doc(documentid).update({
+      editMode: false
+    })
+  }
+
+  submitEditTodoText(documentid, newtext){
+    this.db.collection('todos').doc(documentid).update({
+      editMode: false,
+      text: newtext
+    })
+  }
+
+  
 
 }

@@ -28,6 +28,7 @@ export class TodoInputComponent implements OnInit {
     this.db.collection("todos").add({
       text: text,
       status: "incomplete",
+      editMode: false
     })
     .then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
