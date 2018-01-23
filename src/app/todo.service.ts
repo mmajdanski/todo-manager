@@ -1,57 +1,85 @@
 import { Injectable } from '@angular/core';
 
-import {Todo} from './todo'
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+
+export interface Todo { text: string; status: string; editMode: boolean; }
+export interface TodoId extends Todo { id: string; }
 
 @Injectable()
 export class TodoService {
 
-  todos: Todo[] = [];
-  todoid: number = 0;
+  constructor(private db: AngularFirestore) { }
 
-  constructor() { }
+  private todoCollection: AngularFirestoreCollection<Todo>;
+  todos: Observable<TodoId[]>;
 
-  getTodos(): Todo[]{
-    return this.todos;
+  getTodos(){
+    this.todoCollection = this.db.collection<Todo>('todos');
+    // .snapshotChanges() returns a DocumentChangeAction[], which contains
+    // a lot of information about "what happened" with each change. If you want to
+    // get the data and the id use the map operator.
+    return this.todoCollection.snapshotChanges().map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Todo;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      });
+    });
     
   }
 
-  newTodo(text): void{
-    this.todos.push(new Todo(this.todoid, text));
-    this.todoid += 1;
+  submitTodo(text): void{
+
+    this.db.collection("todos").add({
+      text: text,
+      status: "incomplete",
+      editMode: false
+    })
+    .then(function(docRef) {
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
   }
 
-  printTodos(): void{
-    console.log(this.todos)
-  }
-
-  findTodoIndex(id : number) : number{
-    return this.todos.findIndex( (todo) => todo.id == id);
-  }
-
-  deleteTodo(id : number){
-    this.todos.splice(this.findTodoIndex(id), 1);
-  }
-
-  changeTodoStatus(id : number){
-
-    if (this.todos[this.findTodoIndex(id)].status == 'incomplete'){
-      this.todos[this.findTodoIndex(id)].status = 'complete';
+  changeTodoStatus(documentid, currentStatus){
+    let newStatus: string;
+    
+    if(currentStatus == 'incomplete'){
+      newStatus = 'complete'
     }else{
-      this.todos[this.findTodoIndex(id)].status = 'incomplete';
+      newStatus = 'incomplete'
     }
 
+    this.db.collection('todos').doc(documentid).update({
+      status: newStatus
+    })
   }
 
-  editTodoText(id){
-    //TODO: Make a func that allows for editing
-    
-    this.todos[this.findTodoIndex(id)].editMode = !this.todos[this.findTodoIndex(id)].editMode;
-
-
-    console.log("Make the TODO Editable")
+  deleteTodo(documentid)
+  {
+    this.db.collection('todos').doc(documentid).delete();
   }
 
+  editTodoText(documentid){
+    this.db.collection('todos').doc(documentid).update({
+      editMode: true
+    })
+  }
 
+  cancelEditTodoText(documentid){
+    this.db.collection('todos').doc(documentid).update({
+      editMode: false
+    })
+  }
 
+  submitEditTodoText(documentid, newtext){
+    this.db.collection('todos').doc(documentid).update({
+      editMode: false,
+      text: newtext
+    })
+  }
 
 }
