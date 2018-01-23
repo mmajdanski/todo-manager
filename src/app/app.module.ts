@@ -4,6 +4,7 @@ import { FormsModule }   from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { RouterModule, Routes } from '@angular/router';
 
 
 
@@ -14,6 +15,20 @@ import { TodoStatusComponent } from './todo-status/todo-status.component';
 
 import {TodoService} from './todo.service';
 import { environment } from '../environments/environment';
+import { LoginComponent } from './login/login.component';
+import { TodoComponent } from './todo/todo.component';
+import { NavbarComponent } from './navbar/navbar.component';
+
+const appRoutes: Routes = [
+  {
+    path: 'todos',
+    component: TodoComponent
+  },
+  { path: '',
+    component: LoginComponent,
+    pathMatch: 'full'
+  }
+];
 
 
 
@@ -22,14 +37,21 @@ import { environment } from '../environments/environment';
     AppComponent,
     TodoInputComponent,
     TodoListComponent,
-    TodoStatusComponent
+    TodoStatusComponent,
+    LoginComponent,
+    TodoComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    FormsModule
+    FormsModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // <-- debugging purposes only
+    )
   ],
   providers: [TodoService],
   bootstrap: [AppComponent]
