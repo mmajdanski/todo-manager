@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
-export interface Todo { text: string; status: string; editMode: boolean; }
+export interface Todo { text: string; username: string; status: string; editMode: boolean; }
 export interface TodoId extends Todo { id: string; }
 
 @Injectable()
@@ -29,10 +29,11 @@ export class TodoService {
     
   }
 
-  submitTodo(text): void{
+  submitTodo(text, username): void{
 
     this.db.collection("todos").add({
       text: text,
+      username: username,
       status: "incomplete",
       editMode: false
     })

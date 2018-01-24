@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-
-
-import {Todo} from '../todo'
 import { TodoService } from "../todo.service";
+import { AngularFireAuth } from 'angularfire2/auth';
 
 
 @Component({
@@ -13,10 +11,7 @@ import { TodoService } from "../todo.service";
 })
 export class TodoInputComponent implements OnInit {
 
-  todo: Todo;
-
-
-  constructor(private todoService: TodoService) { 
+  constructor(private todoService: TodoService, public afAuth: AngularFireAuth) { 
 
   }
 
@@ -25,6 +20,8 @@ export class TodoInputComponent implements OnInit {
 
   submitTodo(text)
   {
-    this.todoService.submitTodo(text);
+    let username = this.afAuth.auth.currentUser.displayName;
+
+    this.todoService.submitTodo(text, username);
   }
 }

@@ -1,8 +1,14 @@
+<div *ngIf="afAuth.authState | async as user;">
+  <div class="wrapper">
+    <app-todo-input></app-todo-input>
+  </div>
 
-<div class="wrapper">
-  <app-todo-input></app-todo-input>
+  <div class="todolist">
+    <app-todo-list></app-todo-list>
+  </div>
+
 </div>
 
-<div class="todolist">
-  <app-todo-list></app-todo-list>
+<div *ngIf="afAuth.auth.currentUser == null">
+    <h3>No access to this page. Please Login on the HomePage</h3>  
 </div>
