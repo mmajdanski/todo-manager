@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TodoService } from "../todo.service";
 
-import { AngularFirestore} from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 
 export interface Todo { text: string; status: string; editMode: boolean; }
@@ -19,7 +18,7 @@ export class TodoListComponent implements OnInit {
 
   todos: Observable<TodoId[]>;
 
-  constructor(private todoService: TodoService, private db: AngularFirestore) { }
+  constructor(private todoService: TodoService) { }
 
   ngOnInit() 
   {

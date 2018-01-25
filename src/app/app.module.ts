@@ -18,6 +18,7 @@ import { environment } from '../environments/environment';
 import { LoginComponent } from './login/login.component';
 import { TodoComponent } from './todo/todo.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { LoginService } from './login.service';
 
 const appRoutes: Routes = [
   {
@@ -53,7 +54,7 @@ const appRoutes: Routes = [
      // { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  providers: [TodoService],
+  providers: [TodoService, LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
