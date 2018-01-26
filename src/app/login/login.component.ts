@@ -12,7 +12,7 @@ import { LoginService } from '../login.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private loginService: LoginService) { }
+  constructor(public afAuth: AngularFireAuth, private loginService: LoginService) { }
 
   ngOnInit() {
     

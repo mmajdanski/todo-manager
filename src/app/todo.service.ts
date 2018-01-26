@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import { LoginService } from './login.service';
 
 export interface Todo { text: string; username: string; status: string; editMode: boolean; }
 export interface TodoId extends Todo { id: string; }
@@ -9,13 +10,15 @@ export interface TodoId extends Todo { id: string; }
 @Injectable()
 export class TodoService {
 
-  constructor(private db: AngularFirestore) { }
+  constructor(private db: AngularFirestore, private loginService: LoginService) { }
 
   private todoCollection: AngularFirestoreCollection<Todo>;
   todos: Observable<TodoId[]>;
 
   getTodos(){
-    this.todoCollection = this.db.collection<Todo>('todos');
+    let userDocId = this.loginService.getUserDocId();
+
+    this.todoCollection = this.db.collection<Todo>(`users/${userDocId}/todos`);
     // .snapshotChanges() returns a DocumentChangeAction[], which contains
     // a lot of information about "what happened" with each change. If you want to
     // get the data and the id use the map operator.
@@ -31,7 +34,9 @@ export class TodoService {
 
   submitTodo(text, username): void{
 
-    this.db.collection("todos").add({
+    let userDocId = this.loginService.getUserDocId();
+
+    this.db.collection(`users/${userDocId}/todos`).add({
       text: text,
       username: username,
       status: "incomplete",

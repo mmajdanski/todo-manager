@@ -5,6 +5,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 @Injectable()
 export class LoginService {
 
+  userDocId: string;
+
   constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) { }
 
   loginAnon(displayName) {
@@ -31,7 +33,6 @@ export class LoginService {
     if(user.isAnonymous){
         user.delete().then(function() {
           // User deleted. Redirect to login page...
-          console.log(this.showLogin)
         }).catch(function(error) {
           // An error happened.
         });
@@ -46,12 +47,21 @@ export class LoginService {
     this.db.collection("users").add({
       displayName: this.afAuth.auth.currentUser.displayName
     })
-    .then(function(docRef) {
+    .then((docRef) => {
+      this.setUserDocId(docRef.id);
       console.log("Document written with ID: ", docRef.id);
     })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
+  }
+
+  setUserDocId(docRefId){
+    this.userDocId = docRefId;
+  }
+
+  getUserDocId(): string{
+    return this.userDocId;
   }
   
 
