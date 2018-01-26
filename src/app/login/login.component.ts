@@ -12,64 +12,20 @@ import { LoginService } from '../login.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(public afAuth: AngularFireAuth, private db: AngularFirestore, private loginService: LoginService) { }
+  constructor(private loginService: LoginService) { }
 
   ngOnInit() {
     
   }
 
-  //TODO:
-  //Migrate all of this Service code to login.service.ts
   loginAnon(displayName) {
-    this.afAuth.auth.signInAnonymously().then(loggedInSession => {
-    // console.log(loggedInSession);
-    
-    
-
-      this.afAuth.auth.currentUser.updateProfile({
-        displayName: displayName,
-        photoURL: "" //photoURL required
-      }).then( () => {
-        // Update successful.
-        this.addUserColl(); //Add the user to the DB
-        
-      }).catch(function(error) {
-        // An error happened.
-      });
-    })
-    .catch(err => console.log(err));
+    this.loginService.loginAnon(displayName);
   }
 
   logout() {
-    let user =  this.afAuth.auth.currentUser;
-    
-    if(user.isAnonymous){
-        user.delete().then(function() {
-          // User deleted. Redirect to login page...
-          console.log(this.showLogin)
-        }).catch(function(error) {
-          // An error happened.
-        });
-    }else{
-        //perform logout
-        this.afAuth.auth.signOut().then(() => console.log("logged out"))
-    }    
-    //this.afAuth.auth.signOut().then(() => console.log("logged out"))
+    this.loginService.logout(); 
   }
-  //TODO:
-  //This function will utilize AngularFirestore and AngularFireAuth
-  //Function should probably exist in Todo.Service => Then do a call to Login.Service to get the currentUser.displayName
-  addUserColl(): void{
-    this.db.collection("users").add({
-      displayName: this.afAuth.auth.currentUser.displayName
-    })
-    .then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-    })
-    .catch(function(error) {
-      console.error("Error adding document: ", error);
-    });
-  }
+
   
 
 }
