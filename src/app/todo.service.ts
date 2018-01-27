@@ -51,6 +51,8 @@ export class TodoService {
   }
 
   changeTodoStatus(documentid, currentStatus){
+    let userDocId: string = this.loginService.getUserDocId();
+
     let newStatus: string;
     
     if(currentStatus == 'incomplete'){
@@ -59,30 +61,38 @@ export class TodoService {
       newStatus = 'incomplete'
     }
 
-    this.db.collection('todos').doc(documentid).update({
+    this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
       status: newStatus
     })
   }
 
   deleteTodo(documentid)
   {
-    this.db.collection('todos').doc(documentid).delete();
+    let userDocId: string = this.loginService.getUserDocId();
+
+    this.db.collection(`users/${userDocId}/todos`).doc(documentid).delete();
   }
 
   editTodoText(documentid){
-    this.db.collection('todos').doc(documentid).update({
+    let userDocId: string = this.loginService.getUserDocId();
+
+    this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
       editMode: true
     })
   }
 
   cancelEditTodoText(documentid){
-    this.db.collection('todos').doc(documentid).update({
+    let userDocId: string = this.loginService.getUserDocId();
+
+    this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
       editMode: false
     })
   }
 
   submitEditTodoText(documentid, newtext){
-    this.db.collection('todos').doc(documentid).update({
+    let userDocId: string = this.loginService.getUserDocId();
+
+    this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
       editMode: false,
       text: newtext
     })
