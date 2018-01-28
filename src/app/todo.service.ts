@@ -10,15 +10,25 @@ export interface TodoId extends Todo { id: string; }
 @Injectable()
 export class TodoService {
 
-  constructor(private db: AngularFirestore, private loginService: LoginService) { }
+  userDocId: string;
+
+  constructor(private db: AngularFirestore, private loginService: LoginService) { 
+    
+    this.loginService.userObservable$.subscribe(values => {
+      values.map( userDoc => {
+        this.userDocId = userDoc.id;
+      })
+    });
+  }
 
   private todoCollection: AngularFirestoreCollection<Todo>;
   todos: Observable<TodoId[]>;
 
-  getTodos(){
-    let userDocId = this.loginService.getUserDocId();
+ 
+  getTodos(userDocId){
 
     this.todoCollection = this.db.collection<Todo>(`users/${userDocId}/todos`);
+
     // .snapshotChanges() returns a DocumentChangeAction[], which contains
     // a lot of information about "what happened" with each change. If you want to
     // get the data and the id use the map operator.
@@ -34,7 +44,7 @@ export class TodoService {
 
   submitTodo(text, username): void{
 
-    let userDocId = this.loginService.getUserDocId();
+    let userDocId = this.getUserDocId();
 
     this.db.collection(`users/${userDocId}/todos`).add({
       text: text,
@@ -51,7 +61,8 @@ export class TodoService {
   }
 
   changeTodoStatus(documentid, currentStatus){
-    let userDocId: string = this.loginService.getUserDocId();
+
+    let userDocId = this.getUserDocId();
 
     let newStatus: string;
     
@@ -68,13 +79,13 @@ export class TodoService {
 
   deleteTodo(documentid)
   {
-    let userDocId: string = this.loginService.getUserDocId();
+    let userDocId = this.getUserDocId();
 
     this.db.collection(`users/${userDocId}/todos`).doc(documentid).delete();
   }
 
   editTodoText(documentid){
-    let userDocId: string = this.loginService.getUserDocId();
+    let userDocId = this.getUserDocId();
 
     this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
       editMode: true
@@ -82,7 +93,7 @@ export class TodoService {
   }
 
   cancelEditTodoText(documentid){
-    let userDocId: string = this.loginService.getUserDocId();
+    let userDocId = this.getUserDocId();
 
     this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
       editMode: false
@@ -90,7 +101,7 @@ export class TodoService {
   }
 
   submitEditTodoText(documentid, newtext){
-    let userDocId: string = this.loginService.getUserDocId();
+    let userDocId = this.getUserDocId();
 
     this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
       editMode: false,

@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class LoginService {
 
-  userDocId: string;
+  userObservable$: Observable<any>;
 
-  constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) { }
+  constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) {  
+
+    this.userObservable$ = this.getUserDocId();
+
+   }
 
   loginAnon(displayName) {
     this.afAuth.auth.signInAnonymously().then(loggedInSession => {
@@ -48,7 +53,6 @@ export class LoginService {
       displayName: this.afAuth.auth.currentUser.displayName
     })
     .then((docRef) => {
-      this.setUserDocId(docRef.id);
       console.log("Document written with ID: ", docRef.id);
     })
     .catch(function(error) {
@@ -56,12 +60,15 @@ export class LoginService {
     });
   }
 
-  setUserDocId(docRefId){
-    this.userDocId = docRefId;
-  }
+  getUserDocId(): Observable<any>{
 
-  getUserDocId(): string{
-    return this.userDocId;
+    return this.db.collection('users', ref => ref.where('displayName', '==', this.afAuth.auth.currentUser.displayName))
+    .snapshotChanges().map(actions => {
+      return actions.map(a => {
+        const id = a.payload.doc.id;
+        return { id};
+      });
+    });
   }
   
 

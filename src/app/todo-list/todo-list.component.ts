@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TodoService } from "../todo.service";
 
 import { Observable } from 'rxjs/Observable';
+import { LoginService } from '../login.service';
 
 export interface Todo { text: string; status: string; editMode: boolean; }
 export interface TodoId extends Todo { id: string; }
@@ -17,12 +18,20 @@ export interface TodoId extends Todo { id: string; }
 export class TodoListComponent implements OnInit {
 
   todos: Observable<TodoId[]>;
+  userDocId: string;
 
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService, private loginService: LoginService) { }
 
   ngOnInit() 
   {
-    this.todos = this.todoService.getTodos();
+
+    this.loginService.userObservable$.subscribe(values => {
+      values.map( userDoc => {
+        this.userDocId = userDoc.id
+        this.todos = this.todoService.getTodos(this.userDocId);
+      })
+    });
+
   }
 
   deleteTodo(documentid)
