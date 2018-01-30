@@ -12,6 +12,7 @@ export class LoginService {
 
     this.userObservable$ = this.getUserDocId();
 
+    this.isLoggedIn().subscribe(v=> console.log(v));
    }
 
   loginAnon(displayName) {
@@ -69,6 +70,16 @@ export class LoginService {
         return { id};
       });
     });
+  }
+
+  isLoggedIn(): Observable<boolean>{
+
+    if(this.afAuth.auth.currentUser.displayName){
+      return Observable.of(true);
+    }
+    else{
+      return Observable.of(false);
+    }
   }
   
 

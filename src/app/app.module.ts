@@ -22,11 +22,13 @@ import { TodoComponent } from './todo/todo.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginService } from './login.service';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
+import { AuthGuardService } from './auth-guard.service';
 
 const appRoutes: Routes = [
   {
     path: 'todos',
-    component: TodoComponent
+    component: TodoComponent,
+    canActivate: [AuthGuardService]
   },
   { path: '',
     component: LoginComponent,
@@ -59,7 +61,7 @@ const appRoutes: Routes = [
      // { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  providers: [TodoService, LoginService],
+  providers: [TodoService, LoginService, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

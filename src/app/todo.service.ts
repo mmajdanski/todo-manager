@@ -44,9 +44,7 @@ export class TodoService {
 
   submitTodo(text, username): void{
 
-    let userDocId = this.getUserDocId();
-
-    this.db.collection(`users/${userDocId}/todos`).add({
+    this.db.collection(`users/${this.userDocId}/todos`).add({
       text: text,
       username: username,
       status: "incomplete",
@@ -62,8 +60,6 @@ export class TodoService {
 
   changeTodoStatus(documentid, currentStatus){
 
-    let userDocId = this.getUserDocId();
-
     let newStatus: string;
     
     if(currentStatus == 'incomplete'){
@@ -72,38 +68,32 @@ export class TodoService {
       newStatus = 'incomplete'
     }
 
-    this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
+    this.db.collection(`users/${this.userDocId}/todos`).doc(documentid).update({
       status: newStatus
     })
   }
 
   deleteTodo(documentid)
   {
-    let userDocId = this.getUserDocId();
-
-    this.db.collection(`users/${userDocId}/todos`).doc(documentid).delete();
+    this.db.collection(`users/${this.userDocId}/todos`).doc(documentid).delete();
   }
 
   editTodoText(documentid){
-    let userDocId = this.getUserDocId();
 
-    this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
+    this.db.collection(`users/${this.userDocId}/todos`).doc(documentid).update({
       editMode: true
     })
   }
 
   cancelEditTodoText(documentid){
-    let userDocId = this.getUserDocId();
-
-    this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
+    this.db.collection(`users/${this.userDocId}/todos`).doc(documentid).update({
       editMode: false
     })
   }
 
   submitEditTodoText(documentid, newtext){
-    let userDocId = this.getUserDocId();
 
-    this.db.collection(`users/${userDocId}/todos`).doc(documentid).update({
+    this.db.collection(`users/${this.userDocId}/todos`).doc(documentid).update({
       editMode: false,
       text: newtext
     })
