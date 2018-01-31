@@ -23,6 +23,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LoginService } from './login.service';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { AuthGuardService } from './auth-guard.service';
+import { UserResolverService } from './user-resolver.service';
 
 const appRoutes: Routes = [
   {
@@ -32,7 +33,10 @@ const appRoutes: Routes = [
   },
   { path: '',
     component: LoginComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    resolve: {
+      displayName: UserResolverService
+    }
   }
 ];
 
@@ -61,7 +65,7 @@ const appRoutes: Routes = [
      // { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  providers: [TodoService, LoginService, AuthGuardService],
+  providers: [TodoService, LoginService, AuthGuardService, UserResolverService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

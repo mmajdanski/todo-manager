@@ -4,6 +4,8 @@ import * as firebase from 'firebase/app';
 import { firestore } from 'firebase/app';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { LoginService } from '../login.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -12,10 +14,15 @@ import { LoginService } from '../login.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(public afAuth: AngularFireAuth, private loginService: LoginService) { }
+  displayName: string;
+
+  constructor(public afAuth: AngularFireAuth, private loginService: LoginService, public route: ActivatedRoute) { }
 
   ngOnInit() {
-    
+    this.route.data.subscribe((data) => {
+      this.displayName = data.displayName;
+      this.setLoginServiceDisplayName(data.displayName);
+    });
   }
 
   loginAnon(displayName) {
@@ -24,6 +31,10 @@ export class LoginComponent implements OnInit {
 
   logout() {
     this.loginService.logout(); 
+  }
+
+  setLoginServiceDisplayName(displayName){
+    this.loginService.setLoginServiceDisplayName(displayName);
   }
 
   

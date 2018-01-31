@@ -2,17 +2,20 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import { ActivatedRoute } from '@angular/router';
 
 @Injectable()
 export class LoginService {
 
   userObservable$: Observable<any>;
 
-  constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) {  
+  displayName: string;
 
-    this.userObservable$ = this.getUserDocId();
+  constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) { }
 
-    this.isLoggedIn().subscribe(v=> console.log(v));
+   setLoginServiceDisplayName(displayName){
+     this.displayName = displayName;
+     this.userObservable$ = this.getUserDocId(displayName);
    }
 
   loginAnon(displayName) {
@@ -61,9 +64,9 @@ export class LoginService {
     });
   }
 
-  getUserDocId(): Observable<any>{
+  getUserDocId(displayName): Observable<any>{
 
-    return this.db.collection('users', ref => ref.where('displayName', '==', this.afAuth.auth.currentUser.displayName))
+    return this.db.collection('users', ref => ref.where('displayName', '==', displayName))
     .snapshotChanges().map(actions => {
       return actions.map(a => {
         const id = a.payload.doc.id;
@@ -72,15 +75,6 @@ export class LoginService {
     });
   }
 
-  isLoggedIn(): Observable<boolean>{
-
-    if(this.afAuth.auth.currentUser.displayName){
-      return Observable.of(true);
-    }
-    else{
-      return Observable.of(false);
-    }
-  }
   
 
 }
