@@ -14,30 +14,18 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  displayName: string;
 
-  constructor(public afAuth: AngularFireAuth, private loginService: LoginService, public route: ActivatedRoute) { }
+  user: Object;
+
+  constructor(public afAuth: AngularFireAuth, private loginService: LoginService, public route: ActivatedRoute) {
+    
+   }
 
   ngOnInit() {
-    this.afAuth.auth.onAuthStateChanged((user) => {
-      if (user) {
-        
-        // User is signed in.
-        this.displayName = user.displayName;
-        // ...
-      } else {
-        // User is signed out.
-        // ...
-      }
+    this.loginService.getUserState().subscribe((user) => {
+      this.user = user;
     });
-    
 
-
-    /*this.route.data.subscribe((data) => {
-      console.log(data);
-      this.displayName = data.displayName;
-      this.setLoginServiceDisplayName(data.displayName);
-    });*/
   }
 
   loginAnon(displayName) {
@@ -46,12 +34,6 @@ export class LoginComponent implements OnInit {
 
   logout() {
     this.loginService.logout(); 
-  }
-
-  setLoginServiceDisplayName(displayName){
-    this.loginService.setLoginServiceDisplayName(displayName);
-  }
-
-  
+  }  
 
 }

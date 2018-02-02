@@ -1,5 +1,5 @@
 <div *ngIf="afAuth.authState | async as user;">
-    <h1 *ngIf="displayName != null">Hello {{ displayName }}!</h1>
+    <h1 *ngIf="user.displayName != null">Hello {{ user.displayName }}!</h1>
     <button (click)="logout()">Logout</button>
   </div>
   <div *ngIf="afAuth.auth.currentUser == null">

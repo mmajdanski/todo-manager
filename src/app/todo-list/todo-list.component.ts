@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { TodoService } from "../todo.service";
 
 import { Observable } from 'rxjs/Observable';
@@ -18,20 +18,13 @@ export interface TodoId extends Todo { id: string; }
 export class TodoListComponent implements OnInit {
 
   todos: Observable<TodoId[]>;
-  userDocId: string;
+  @Input() user;
 
   constructor(private todoService: TodoService, private loginService: LoginService) { }
 
   ngOnInit() 
   {
-
-    this.loginService.userObservable$.subscribe(values => {
-      values.map( userDoc => {
-        this.userDocId = userDoc.id
-        this.todos = this.todoService.getTodos(this.userDocId);
-      })
-    });
-
+    console.log(this.user);
   }
 
   deleteTodo(documentid)

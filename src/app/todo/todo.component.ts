@@ -4,6 +4,7 @@ import {TodoInputComponent} from '../todo-input/todo-input.component';
 import {TodoListComponent} from '../todo-list/todo-list.component';
 import {TodoStatusComponent} from '../todo-status/todo-status.component';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { LoginService } from '../login.service';
 
 @Component({
   selector: 'app-todo',
@@ -12,9 +13,14 @@ import { AngularFireAuth } from 'angularfire2/auth';
 })
 export class TodoComponent implements OnInit {
 
-  constructor(public afAuth: AngularFireAuth) { }
+  user: Object;
+
+  constructor(private loginService: LoginService, public afAuth: AngularFireAuth) { }
 
   ngOnInit() {
+    this.loginService.getUserState().subscribe((user) => {
+      this.user = user;
+    });
   }
 
 }

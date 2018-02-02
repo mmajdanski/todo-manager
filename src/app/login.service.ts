@@ -13,11 +13,10 @@ export class LoginService {
 
   constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) { }
 
-   setLoginServiceDisplayName(displayName){
-     this.displayName = displayName;
-     this.userObservable$ = this.getUserDocId(displayName);
+   getUserState(): Observable<any>{
+    return this.afAuth.authState;
    }
-
+   
   loginAnon(displayName) {
     this.afAuth.auth.signInAnonymously().then(loggedInSession => {
     // console.log(loggedInSession);

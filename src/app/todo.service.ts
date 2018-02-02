@@ -14,11 +14,7 @@ export class TodoService {
 
   constructor(private db: AngularFirestore, private loginService: LoginService) { 
     
-    this.loginService.userObservable$.subscribe(values => {
-      values.map( userDoc => {
-        this.userDocId = userDoc.id;
-      })
-    });
+
   }
 
   private todoCollection: AngularFirestoreCollection<Todo>;
