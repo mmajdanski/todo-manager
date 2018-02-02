@@ -16,17 +16,18 @@ export class LoginService {
    getUserState(): Observable<any>{
     return this.afAuth.authState;
    }
-   
+
   loginAnon(displayName) {
     this.afAuth.auth.signInAnonymously().then(loggedInSession => {
-    // console.log(loggedInSession);
+      
+    let uid = loggedInSession.uid;
 
       this.afAuth.auth.currentUser.updateProfile({
         displayName: displayName,
         photoURL: "" //photoURL required
       }).then( () => {
         // Update successful.
-        this.addUserColl(); //Add the user to the DB
+        this.addUserColl(uid); //Add the user to the DB
         
       }).catch(function(error) {
         // An error happened.
@@ -51,29 +52,13 @@ export class LoginService {
     //this.afAuth.auth.signOut().then(() => console.log("logged out"))
   }
 
-  addUserColl(): void{
-    this.db.collection("users").add({
+  addUserColl(uid): void{
+    this.db.collection("users").doc(uid).set({
       displayName: this.afAuth.auth.currentUser.displayName
-    })
-    .then((docRef) => {
-      console.log("Document written with ID: ", docRef.id);
     })
     .catch(function(error) {
       console.error("Error adding document: ", error);
     });
   }
-
-  getUserDocId(displayName): Observable<any>{
-
-    return this.db.collection('users', ref => ref.where('displayName', '==', displayName))
-    .snapshotChanges().map(actions => {
-      return actions.map(a => {
-        const id = a.payload.doc.id;
-        return { id};
-      });
-    });
-  }
-
   
-
 }
