@@ -7,15 +7,15 @@ import { ActivatedRoute } from '@angular/router';
 @Injectable()
 export class LoginService {
 
-  userObservable$: Observable<any>;
-
   displayName: string;
+  user: Object;
 
-  constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) { }
-
-   getUserState(): Observable<any>{
-    return this.afAuth.authState;
-   }
+  constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) { 
+    //OnAuthChanged
+    this.afAuth.authState.subscribe((user) => {
+      this.user = user;
+    });
+  }
 
   loginAnon(displayName) {
     this.afAuth.auth.signInAnonymously().then(loggedInSession => {

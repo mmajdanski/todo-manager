@@ -18,13 +18,13 @@ export interface TodoId extends Todo { id: string; }
 export class TodoListComponent implements OnInit {
 
   todos: Observable<TodoId[]>;
-  @Input() user;
+  
 
   constructor(private todoService: TodoService, private loginService: LoginService) { }
 
   ngOnInit() 
   {
-    console.log(this.user);
+    this.todos = this.todoService.getTodos();
   }
 
   deleteTodo(documentid)

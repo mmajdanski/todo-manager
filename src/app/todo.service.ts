@@ -13,7 +13,7 @@ export class TodoService {
   userDocId: string;
 
   constructor(private db: AngularFirestore, private loginService: LoginService) { 
-    
+    this.userDocId = this.loginService.user['uid'];
 
   }
 
@@ -21,9 +21,9 @@ export class TodoService {
   todos: Observable<TodoId[]>;
 
  
-  getTodos(userDocId){
+  getTodos(){
 
-    this.todoCollection = this.db.collection<Todo>(`users/${userDocId}/todos`);
+    this.todoCollection = this.db.collection<Todo>(`users/${this.userDocId}/todos`);
 
     // .snapshotChanges() returns a DocumentChangeAction[], which contains
     // a lot of information about "what happened" with each change. If you want to

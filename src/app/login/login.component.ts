@@ -22,9 +22,7 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.loginService.getUserState().subscribe((user) => {
-      this.user = user;
-    });
+    this.user = this.loginService.user;
 
   }
 

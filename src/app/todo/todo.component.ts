@@ -18,9 +18,7 @@ export class TodoComponent implements OnInit {
   constructor(private loginService: LoginService, public afAuth: AngularFireAuth) { }
 
   ngOnInit() {
-    this.loginService.getUserState().subscribe((user) => {
-      this.user = user;
-    });
+    
   }
 
 }
