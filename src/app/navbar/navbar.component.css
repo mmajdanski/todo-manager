@@ -6,3 +6,11 @@
     flex: 1 auto;
     }
   
+@media screen and (max-width: 600px){
+    .mat-toolbar {
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        padding: 25px 0 200px 0;
+    }
+}
+    
