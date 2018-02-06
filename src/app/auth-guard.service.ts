@@ -12,13 +12,19 @@ export class AuthGuardService implements CanActivate {
 
   isLoggedIn: boolean;
   User: Object;
-  auth$: Observable<any>;
+  auth$: Observable<boolean>;
 
   constructor(public afAuth: AngularFireAuth, private loginService: LoginService, private router: Router ) { }
 
   canActivate(): Observable<boolean>|Promise<boolean>|boolean {
 
-      this.auth$ = this.afAuth.authState.map(user =>  !!user);
+      this.auth$ = this.afAuth.authState.map(user =>  {
+        if(user){
+          return true; //User exists
+        }else{
+          return false; //User does not exist
+        }
+      });
 
 
       return this.auth$

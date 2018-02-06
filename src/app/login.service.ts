@@ -12,7 +12,10 @@ export class LoginService {
 
   constructor(public afAuth: AngularFireAuth, private db: AngularFirestore) { 
     //OnAuthChanged
-    this.afAuth.authState.subscribe((user) => {
+    this.afAuth.authState
+    .map((user) => {return user})
+    .do((value) => {console.log(value)})
+    .subscribe((user) => {
       this.user = user;
     });
   }
