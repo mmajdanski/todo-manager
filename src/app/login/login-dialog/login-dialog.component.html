@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Please Login</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput cdkFocusInitial #nameinput type="text" placeholder="Enter a Username">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" mat-dialog-close (click)="loginAnon(nameinput.value)">Sign in!</button>
+  <button mat-button color="warn" (click)="closeDialog()">Cancel</button>
+</div>
+

@@ -2,8 +2,5 @@
     <button (click)="logout()">Logout</button>
   </div>
   <div *ngIf="afAuth.auth.currentUser == null">
-    <p>Please login.</p>
-    <label for="name-input">Enter username:</label>
-    <input #nameinput type="text">
-    <button (click)="loginAnon(nameinput.value)">Login</button>
+    <button (click)="openDialog()">Login</button>
   </div>

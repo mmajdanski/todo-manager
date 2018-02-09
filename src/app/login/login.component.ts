@@ -5,19 +5,21 @@ import { firestore } from 'firebase/app';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { LoginService } from '../login.service';
 import { ActivatedRoute } from '@angular/router';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { MatDialog } from '@angular/material';
 
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
 
 
   user: Object;
 
-  constructor(public afAuth: AngularFireAuth, private loginService: LoginService, public route: ActivatedRoute) {
+  constructor(public afAuth: AngularFireAuth, private loginService: LoginService, public route: ActivatedRoute, public dialog: MatDialog) {
     
    }
 
@@ -26,12 +28,20 @@ export class LoginComponent implements OnInit {
 
   }
 
-  loginAnon(displayName) {
-    this.loginService.loginAnon(displayName);
-  }
 
   logout() {
     this.loginService.logout(); 
   }  
+
+  openDialog(): void {
+    let dialogRef = this.dialog.open(LoginDialogComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+
+  }
 
 }

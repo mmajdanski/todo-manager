@@ -23,6 +23,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LoginService } from './login.service';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { AuthGuardService } from './auth-guard.service';
+import { LoginDialogComponent } from './login/login-dialog/login-dialog.component';
 
 
 const appRoutes: Routes = [
@@ -31,10 +32,10 @@ const appRoutes: Routes = [
     component: TodoComponent,
     canActivate: [AuthGuardService]
   },
-  { path: '',
+  /*{ path: '',
     component: LoginComponent,
     pathMatch: 'full'
-  }
+  }*/
 ];
 
 
@@ -47,7 +48,8 @@ const appRoutes: Routes = [
     TodoStatusComponent,
     LoginComponent,
     TodoComponent,
-    NavbarComponent
+    NavbarComponent,
+    LoginDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +65,7 @@ const appRoutes: Routes = [
     )
   ],
   providers: [TodoService, LoginService, AuthGuardService],
+  entryComponents: [LoginDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

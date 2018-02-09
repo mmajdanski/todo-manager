@@ -5,6 +5,7 @@
     <span class="spacer"></span>
     <a mat-raised-button color="warn" routerLink="/todos" routerLinkActive="active">Todos</a>
     <span class="spacer"></span>
+    <app-login></app-login>
     <span *ngIf="afAuth.authState | async as user;">Welcome, {{user.displayName}}</span>
     <mat-icon class="icon">verified_user</mat-icon>
   </mat-toolbar>
