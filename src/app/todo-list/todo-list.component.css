@@ -5,3 +5,17 @@
 li{
     list-style: none;
 }
+
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+.strikeout{
+    color: #999;
+    text-decoration: line-through;
+}
+
+.completecard{
+    background-color: darkslategrey;
+}

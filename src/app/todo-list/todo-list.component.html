@@ -1,8 +1,8 @@
 <ul>
   <li *ngFor="let todo of todos | async">
-    <mat-card>
+    <mat-card [ngClass]="{'completecard': todo.status == 'complete'}">
     <button mat-line (click)="changeTodoStatus(todo.id, todo.status)" [hidden]="todo.editMode">Checkmark</button>
-    <span mat-line [hidden]="todo.editMode"><b>{{todo.username}}:</b> {{todo.text}} - Completion status: {{todo.status}}</span>
+    <span mat-line [ngClass]="{'strikeout': todo.status == 'complete'}" [hidden]="todo.editMode"><b>{{todo.text}}</b></span>
     <input [(ngModel)]="todo.text" #ctrl="ngModel" type="text" [hidden]="!todo.editMode" >
     <button (click)="deleteTodo(todo.id)" [hidden]="todo.editMode">X</button>
     <button (click)="editTodoText(todo.id)" [hidden]="todo.editMode">Edit</button>

@@ -57,7 +57,6 @@ export class TodoService {
   changeTodoStatus(documentid, currentStatus){
 
     let newStatus: string;
-    
     if(currentStatus == 'incomplete'){
       newStatus = 'complete'
     }else{
